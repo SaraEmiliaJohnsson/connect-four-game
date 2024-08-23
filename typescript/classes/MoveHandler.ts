@@ -16,8 +16,20 @@ export default class MoveHandler {
     }
 
     if (symbol !== 'X' && symbol !== 'O') {
+      console.log('Invalid color!');
       return false;
     }
+
+    if (isNaN(column)) {
+      console.log('Invalid column');
+      return false;
+    }
+    if (column < 0 || column >= this.board.gameBoard[0].length) {
+      console.log('Invalid column!');
+      return false;
+    }
+
+    return true;
 
   }
 }
