@@ -6,6 +6,7 @@ export default class MoveHandler {
   board: Board;
   players: Player[];
   currentPlayerIndex: number;
+  // gameOver: boolean;
 
 
   constructor(board: Board, players: Player[]) {
@@ -15,10 +16,10 @@ export default class MoveHandler {
   }
 
   makeMove(symbol: 'X' | 'O', column: number): boolean {
-    if (this.board.gameOver) {
-      console.log('The game is over! Please start a new game.');
-      return false;
-    }
+    // if (this.board.gameOver) {
+    //   console.log('The game is over! Please start a new game.');
+    //   return false;
+    // }
 
     const currentPlayer = this.players[this.currentPlayerIndex];
 
@@ -37,7 +38,7 @@ export default class MoveHandler {
         this.board.gameBoard[row][column] = currentPlayer.symbol;
 
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
-        this.board.currentPlayerSymbol = this.players[this.currentPlayerIndex].symbol;
+        // this.board.currentPlayerSymbol = this.players[this.currentPlayerIndex].symbol;
         return true;
       }
     }

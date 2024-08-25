@@ -1,24 +1,17 @@
 export default class Board {
 
-	gameBoard: string[][];
-	currentPlayerSymbol: 'X' | 'O';
-	winner: string | boolean;
-	isDraw: boolean;
-	gameOver: boolean;
+	gameBoard: string[][]; // The game board, a 2D array.
+
 
 	constructor() {
-
+		// Initializes the game board with 7 coulmns and 6 rows
 		this.gameBoard = Array.from({ length: 7 }, () =>
 			Array.from({ length: 6 }, () => ' ')
 		);
 
-		this.currentPlayerSymbol = 'X';
-
-		this.winner = false;
-		this.isDraw = false;
-		this.gameOver = false;
 	}
 
+	// Renders the game board in the console
 	render() {
 		let line = '\n' + '-'.repeat(25) + '\n';
 		console.log(
