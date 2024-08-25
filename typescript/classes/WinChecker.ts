@@ -15,6 +15,31 @@ export default class WinChecker {
       [[0, 0], [1, 0], [2, 0], [3, 0]], // check vertical win
       [[0, 0], [1, 1], [2, 2], [3, 3]], // check digonal down win
       [[0, 0], [1, -1], [2, -2], [3, -3]] // check diagonal up win
-    ]
+    ];
+
+    for (let symbol of ['X', 'O']) {
+      for (let r = 0; r < b.length; r++) {
+        for (let c = 0; c < b[0].length; c++) {
+          for (let winType of offsets) {
+            let symbolsInCombo = '';
+            for (let [ro, co] of winType) {
+              const newRow = r + ro;
+              const newCol = c + co;
+              if (newRow >= 0 && newRow < b.length && newCol >= 0 && newCol < b[0].length) {
+                symbolsInCombo += b[newRow][newCol];
+              }
+            }
+            if (symbolsInCombo === symbol.repeat(4)) {
+              return symbol;
+            }
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  public checkForDraw(): boolean {
+    return !this.checkForWin() && !this.board.gameBoard.flat().includes(' ');
   }
 }
