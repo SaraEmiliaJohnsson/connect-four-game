@@ -1,25 +1,24 @@
 import Board from "./Board.js";
+import Game from "./Game.js";
 import Player from "./Player.js";
 
 
 export default class MoveHandler {
-  board: Board;
-  players: Player[];
-  currentPlayerIndex: number;
-  // gameOver: boolean;
+  private board: Board;
+  private players: Player[];
+  private currentPlayerIndex: number;
+  private game: Game;
 
 
-  constructor(board: Board, players: Player[]) {
+  constructor(board: Board, players: Player[], game: Game) {
     this.board = board;
     this.players = players;
+    this.game = game;
     this.currentPlayerIndex = 0;
   }
 
   makeMove(symbol: 'X' | 'O', column: number): boolean {
-    // if (this.board.gameOver) {
-    //   console.log('The game is over! Please start a new game.');
-    //   return false;
-    // }
+
 
     const currentPlayer = this.players[this.currentPlayerIndex];
 
