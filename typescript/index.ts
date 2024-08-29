@@ -1,8 +1,5 @@
-// import prompt from './helpers/prompt.js';
-import Board from './classes/Board.js';
+import Game from "./classes/Game.js";
 
-// let name = prompt('Vad heter du? ');
-// console.log(`Hej ${name}!`);
 
-const board = new Board();
-board.render();
+
+new Game();

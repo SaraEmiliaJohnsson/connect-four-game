@@ -3,7 +3,7 @@ import Board from "./Board.js"
 // The WinChecker class checks the game board to see
 // if a player has won or if the game has ended in a draw.
 export default class WinChecker {
-  private board: Board;
+  board: Board;
 
   constructor(board: Board) {
     this.board = board;

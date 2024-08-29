@@ -4,10 +4,10 @@ import Player from "./Player.js";
 
 
 export default class MoveHandler {
-  private board: Board;
-  private players: Player[];
-  private currentPlayerIndex: number;
-  private game: Game;
+  board: Board;
+  players: Player[];
+  currentPlayerIndex: number;
+  game: Game;
 
 
   constructor(board: Board, players: Player[], game: Game) {
@@ -17,18 +17,16 @@ export default class MoveHandler {
     this.currentPlayerIndex = 0;
   }
 
-  makeMove(symbol: 'X' | 'O', column: number): boolean {
-
-
-    const currentPlayer = this.players[this.currentPlayerIndex];
-
-    if (symbol !== 'X' && symbol !== 'O') {
-      console.log('Invalid symbol! Only X or O are allowed.');
+  makeMove(column: number): boolean {
+    if (this.game.gameOver) {
       return false;
     }
 
+    const currentPlayer = this.game.currentPlayer;
+
+
     if (isNaN(column) || column < 0 || column >= this.board.gameBoard[0].length) {
-      console.log('Invalid column!');
+      console.log('Ogiltig kolumn!');
       return false;
     }
 
@@ -36,15 +34,29 @@ export default class MoveHandler {
       if (this.board.gameBoard[row][column] === ' ') {
         this.board.gameBoard[row][column] = currentPlayer.symbol;
 
-        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
-        // this.board.currentPlayerSymbol = this.players[this.currentPlayerIndex].symbol;
+        const winner = this.game.winChecker.checkForWin();
+        const isDraw = this.game.winChecker.checkForDraw();
+
+        this.board.render();
+
+        if (winner === currentPlayer.symbol) {
+          this.game.gameOver = true;
+          console.log(`Grattis ${currentPlayer.name}, du vann med ${currentPlayer.symbol}!`);
+        } else if (isDraw) {
+          this.game.gameOver = true;
+          console.log('Ingen vinnare, det blev oavgjort...');
+        } else {
+          this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+        }
+
+
         return true;
       }
     }
 
 
 
-    console.log("Column is full! Please choose another column.");
+    console.log('Kolumnen är full! Vänligen välj en annan kolumn.');
     return false;
   }
 }
