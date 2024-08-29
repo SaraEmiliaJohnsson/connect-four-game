@@ -5,15 +5,15 @@ export default class Board {
 
 	constructor() {
 		// Initializes the game board with 7 coulmns and 6 rows
-		this.gameBoard = Array.from({ length: 7 }, () =>
-			Array.from({ length: 6 }, () => ' ')
+		this.gameBoard = Array.from({ length: 6 }, () =>
+			Array.from({ length: 7 }, () => ' ')
 		);
 
 	}
 
 	// Renders the game board in the console
 	render() {
-		let line = '\n' + '-'.repeat(25) + '\n';
+		let line = '\n' + '-'.repeat(29) + '\n';
 		console.log(
 			line +
 			this.gameBoard.map(row =>

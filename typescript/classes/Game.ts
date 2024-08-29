@@ -2,6 +2,7 @@ import Board from "./Board.js";
 import MoveHandler from "./MoveHandler.js";
 import Player from "./Player.js";
 import WinChecker from "./WinChecker.js";
+import prompt from "../helpers/prompt.js";
 
 
 export default class Game {
@@ -15,21 +16,24 @@ export default class Game {
 
   constructor() {
     this.gameOver = false;
+    this.createPlayer();
+
     while (true) {
-      this.createPlayer();
+
       this.board = new Board();
       this.winChecker = new WinChecker(this.board);
       this.moveHandler = new MoveHandler(this.board, [this.playerX, this.playerO], this);
 
       this.startGameLoop();
-      this.whoHasWonOnGameOver();
 
-      let playAgain = prompt('Vill ni spela igen med samma namn? (ja/nej): ');
-      if (playAgain?.toLowerCase() !== 'ja') {
-        continue;
+      let playAgain = this.askYesOrNo('Vill ni spela igen med samma namn? (ja/nej): ');
+      if (playAgain?.toLowerCase() === 'ja') {
+        this.resetGame();
       } else {
-        let changeNames = prompt('Vill ni starta spelet med nya namn? (ja/nej): ');
+        let changeNames = this.askYesOrNo('Vill ni starta spelet med nya namn? (ja/nej): ');
         if (changeNames?.toLowerCase() === 'ja') {
+          this.createPlayer();
+          this.resetGame();
           continue;
         } else {
           console.log('Tack för att ni spelade!');
@@ -38,6 +42,15 @@ export default class Game {
         }
       }
     }
+  }
+
+  resetGame() {
+    this.board = new Board();
+    this.winChecker = new WinChecker(this.board);
+    this.moveHandler = new MoveHandler(this.board, [this.playerX, this.playerO], this);
+    this.gameOver = false;
+
+    console.log(`${this.currentPlayer.name} börjar spelet som ${this.currentPlayer.symbol}.`);
   }
 
   askYesOrNo(question: string): string {
@@ -56,21 +69,24 @@ export default class Game {
   createPlayer() {
     console.clear();
     console.log('Fyra-I-Rad\n');
-    const playerXName: string = prompt('Skriv in namn för spelare X: ') || 'Spelare X';
-    const playerOName: string = prompt('Skriv in namn för spelare O: ') || 'Spelare O';
+    const player1Name: string = prompt('Skriv in namn för spelare 1: ') || 'Spelare 1';
+    const player2Name: string = prompt('Skriv in namn för spelare 2: ') || 'Spelare 2';
 
-    this.playerX = new Player(playerXName, 'X');
-    this.playerO = new Player(playerOName, 'O');
+
 
     if (Math.random() < 0.5) {
+      this.playerX = new Player(player1Name, 'X');
+      this.playerO = new Player(player2Name, 'O');
       this.currentPlayer = this.playerX;
-      console.log(`${this.playerX.name} börjar spelet som 'X'.`);
+      console.log(`${this.currentPlayer.name} börjar spelet som 'X'.`);
 
     } else {
+      this.playerO = new Player(player2Name, 'X');
+      this.playerX = new Player(player1Name, 'O');
       this.currentPlayer = this.playerO;
-      console.log(`${this.playerO.name} börjar spelet med 'O'.`);
+      console.log(`${this.currentPlayer.name} börjar spelet med 'O'.`);
     }
-    prompt('Tryck Enter för att fortsätta...')
+    prompt('Tryck Enter för att fortsätta...');
   }
 
   startGameLoop() {
@@ -85,30 +101,17 @@ export default class Game {
 
       let column = +move.trim() - 1;
 
-      if (!this.moveHandler.makeMove(this.currentPlayer.symbol, column)) {
+      if (!this.moveHandler.makeMove(column)) {
         console.log('Ogiltigt drag. Försök igen.');
         prompt('Tryck Enter för att fortsätta...');
         continue;
       }
 
-      this.currentPlayer = this.currentPlayer === this.playerX ? this.playerO : this.playerX;
-
-      if (this.winChecker.checkForWin() || this.winChecker.checkForDraw()) {
-        this.gameOver = true;
+      if (!this.gameOver) {
+        this.currentPlayer = this.currentPlayer === this.playerX ? this.playerO : this.playerX;
+      } else {
+        prompt('Tryck Enter för att avsluta...');
       }
-    }
-  }
-
-  whoHasWonOnGameOver() {
-    console.clear();
-    this.board.render();
-
-    if (this.winChecker.checkForWin()) {
-      let winningPlayer = this.currentPlayer === this.playerX ? this.playerO : this.playerX;
-      console.log(`Grattis ${winningPlayer.symbol}: ${winningPlayer.name}, du vann!`);
-    } else {
-      console.log('Ingen vinnare, det blev oavgjort...');
-
     }
   }
 }
