@@ -4,10 +4,10 @@ import Player from "./Player.js";
 
 
 export default class MoveHandler {
-  private board: Board;
-  private players: Player[];
-  private currentPlayerIndex: number;
-  private game: Game;
+  board: Board;
+  players: Player[];
+  currentPlayerIndex: number;
+  game: Game;
 
 
   constructor(board: Board, players: Player[], game: Game) {

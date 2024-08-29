@@ -5,13 +5,13 @@ import WinChecker from "./WinChecker.js";
 
 
 export default class Game {
-  private board: Board;
-  private playerX!: Player;
-  private playerO!: Player;
-  private moveHandler: MoveHandler;
-  private winChecker: WinChecker;
-  private currentPlayer!: Player;
-  private gameOver: boolean;
+  board: Board;
+  playerX!: Player;
+  playerO!: Player;
+  moveHandler: MoveHandler;
+  winChecker: WinChecker;
+  currentPlayer!: Player;
+  gameOver: boolean;
 
   constructor() {
     this.gameOver = false;
@@ -21,8 +21,36 @@ export default class Game {
       this.winChecker = new WinChecker(this.board);
       this.moveHandler = new MoveHandler(this.board, [this.playerX, this.playerO], this);
 
-    }
+      this.startGameLoop();
+      this.whoHasWonOnGameOver();
 
+      let playAgain = prompt('Vill ni spela igen med samma namn? (ja/nej): ');
+      if (playAgain?.toLowerCase() !== 'ja') {
+        continue;
+      } else {
+        let changeNames = prompt('Vill ni starta spelet med nya namn? (ja/nej): ');
+        if (changeNames?.toLowerCase() === 'ja') {
+          continue;
+        } else {
+          console.log('Tack för att ni spelade!');
+          break;
+
+        }
+      }
+    }
+  }
+
+  askYesOrNo(question: string): string {
+    let answer: string | null;
+
+    do {
+      answer = prompt(question)?.toLowerCase() ?? null;
+      if (answer !== 'ja' && answer !== 'nej') {
+        console.log('Ogiltigt svar, ange "ja" eller "nej".');
+
+      }
+    } while (answer !== 'ja' && answer !== 'nej');
+    return answer;
   }
 
   createPlayer() {
@@ -68,6 +96,19 @@ export default class Game {
       if (this.winChecker.checkForWin() || this.winChecker.checkForDraw()) {
         this.gameOver = true;
       }
+    }
+  }
+
+  whoHasWonOnGameOver() {
+    console.clear();
+    this.board.render();
+
+    if (this.winChecker.checkForWin()) {
+      let winningPlayer = this.currentPlayer === this.playerX ? this.playerO : this.playerX;
+      console.log(`Grattis ${winningPlayer.symbol}: ${winningPlayer.name}, du vann!`);
+    } else {
+      console.log('Ingen vinnare, det blev oavgjort...');
+
     }
   }
 }
