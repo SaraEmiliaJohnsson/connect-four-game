@@ -50,6 +50,7 @@ export default class Game {
     this.moveHandler = new MoveHandler(this.board, [this.playerX, this.playerO], this);
     this.gameOver = false;
 
+    this.currentPlayer = this.playerX;
     console.log(`${this.currentPlayer.name} börjar spelet som ${this.currentPlayer.symbol}.`);
   }
 
@@ -69,23 +70,16 @@ export default class Game {
   createPlayer() {
     console.clear();
     console.log('Fyra-I-Rad\n');
-    const player1Name: string = prompt('Skriv in namn för spelare 1: ') || 'Spelare 1';
-    const player2Name: string = prompt('Skriv in namn för spelare 2: ') || 'Spelare 2';
+    const playerXName = prompt('Skriv in namn för spelare X: ') || 'Spelare X';
+    const playerOName = prompt('Skriv in namn för spelare O: ') || 'Spelare O';
 
+    this.playerX = new Player(playerXName, 'X');
+    this.playerO = new Player(playerOName, 'O');
 
+    this.currentPlayer = this.playerX;
 
-    if (Math.random() < 0.5) {
-      this.playerX = new Player(player1Name, 'X');
-      this.playerO = new Player(player2Name, 'O');
-      this.currentPlayer = this.playerX;
-      console.log(`${this.currentPlayer.name} börjar spelet som 'X'.`);
+    console.log(`${this.currentPlayer.name} börjar spelet som ${this.currentPlayer.symbol}.`);
 
-    } else {
-      this.playerO = new Player(player2Name, 'X');
-      this.playerX = new Player(player1Name, 'O');
-      this.currentPlayer = this.playerO;
-      console.log(`${this.currentPlayer.name} börjar spelet med 'O'.`);
-    }
     prompt('Tryck Enter för att fortsätta...');
   }
 
@@ -108,10 +102,9 @@ export default class Game {
       }
 
       if (!this.gameOver) {
-        this.currentPlayer = this.currentPlayer === this.playerX ? this.playerO : this.playerX;
-      } else {
-        prompt('Tryck Enter för att avsluta...');
+        continue;
       }
+      prompt('Tryck Enter för att avsluta...');
     }
   }
 }

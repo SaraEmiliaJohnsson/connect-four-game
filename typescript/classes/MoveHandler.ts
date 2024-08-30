@@ -6,7 +6,6 @@ import Player from "./Player.js";
 export default class MoveHandler {
   board: Board;
   players: Player[];
-  currentPlayerIndex: number;
   game: Game;
 
 
@@ -14,7 +13,6 @@ export default class MoveHandler {
     this.board = board;
     this.players = players;
     this.game = game;
-    this.currentPlayerIndex = 0;
   }
 
   makeMove(column: number): boolean {
@@ -46,7 +44,8 @@ export default class MoveHandler {
           this.game.gameOver = true;
           console.log('Ingen vinnare, det blev oavgjort...');
         } else {
-          this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+          this.game.currentPlayer = this.game.currentPlayer === this.game.playerX ? this.game.playerO : this.game.playerX;
+          console.log(`Nästa spelare är ${this.game.currentPlayer.name} med ${this.game.currentPlayer.symbol}.`);
         }
 
 
