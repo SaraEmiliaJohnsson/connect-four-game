@@ -71,10 +71,22 @@ export default class Game {
     console.clear();
     console.log('Fyra-I-Rad\n');
     const playerXName = prompt('Skriv in namn för spelare X: ') || 'Spelare X';
-    const playerOName = prompt('Skriv in namn för spelare O: ') || 'Spelare O';
 
-    this.playerX = new Player(playerXName, 'X');
-    this.playerO = new Player(playerOName, 'O');
+    const playerOType = this.askYesOrNo('Vill du att spelare O ska vara en dator? (ja/nej): ');
+
+    let playerOName: string;
+    let isComputer: boolean = false;
+
+    if (playerOType === 'ja') {
+      playerOName = 'Dator';
+      isComputer = true;
+    } else {
+      playerOName = prompt('Skriv in namn för spelare O: ') || 'Spelare O';
+    }
+
+
+    this.playerX = new Player(playerXName, 'X', this.board, false);
+    this.playerO = new Player(playerOName, 'O', this.board, isComputer);
 
     this.currentPlayer = this.playerX;
 
