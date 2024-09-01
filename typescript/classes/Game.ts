@@ -15,6 +15,8 @@ export default class Game {
   gameOver: boolean;
 
   constructor() {
+    this.board = new Board();
+
     this.gameOver = false;
     this.createPlayer();
 
@@ -100,19 +102,27 @@ export default class Game {
     while (!this.gameOver) {
       console.clear();
       this.board.render();
-      let move = prompt(`Ange ditt drag ${this.currentPlayer.symbol} ${this.currentPlayer.name} - skriv in kolumnnummer (1-7): `);
-      if (move === null) {
-        console.log('Du måste ange en kolumn mellan 1-7. Försök igen.');
-        return;
+
+      if (this.currentPlayer.computerMove) {
+        this.moveHandler.makeMove(-1);
+
+
+      } else {
+        let move = prompt(`Ange ditt drag ${this.currentPlayer.symbol} ${this.currentPlayer.name} - skriv in kolumnnummer (1-7): `);
+        if (move === null) {
+          console.log('Du måste ange en kolumn mellan 1-7. Försök igen.');
+          return;
+        }
+
+        let column = +move.trim() - 1;
+
+        if (!this.moveHandler.makeMove(column)) {
+          console.log('Ogiltigt drag. Försök igen.');
+          prompt('Tryck Enter för att fortsätta...');
+          continue;
+        }
       }
 
-      let column = +move.trim() - 1;
-
-      if (!this.moveHandler.makeMove(column)) {
-        console.log('Ogiltigt drag. Försök igen.');
-        prompt('Tryck Enter för att fortsätta...');
-        continue;
-      }
 
       if (!this.gameOver) {
         continue;

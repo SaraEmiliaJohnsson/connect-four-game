@@ -21,33 +21,28 @@ export default class MoveHandler {
     }
 
     const currentPlayer = this.game.currentPlayer;
+    let row: number | undefined;
 
 
     if (currentPlayer.computerMove) {
-      const [row, computerColumn] = currentPlayer.makeComputerMove();
-      this.board.gameBoard[row][computerColumn] = currentPlayer.symbol;
-      return this.#checkGameState(currentPlayer);
+      column = currentPlayer.makeComputerMove();
     }
-
-
 
     if (isNaN(column) || column < 0 || column >= this.board.gameBoard[0].length) {
       console.log('Ogiltig kolumn!');
       return false;
     }
 
-    for (let row = this.board.gameBoard.length - 1; row >= 0; row--) {
+    for (row = this.board.gameBoard.length - 1; row >= 0; row--) {
       if (this.board.gameBoard[row][column] === ' ') {
         this.board.gameBoard[row][column] = currentPlayer.symbol;
         return this.#checkGameState(currentPlayer);
       }
     }
 
-
     console.log('Kolumnen är full! Vänligen välj en annan kolumn.');
     return false;
   }
-
   #checkGameState(currentPlayer: Player): boolean {
     const winner = this.game.winChecker.checkForWin();
     const isDraw = this.game.winChecker.checkForDraw();
@@ -68,4 +63,36 @@ export default class MoveHandler {
 
     return true;
   }
+
 }
+//   if (currentPlayer.computerMove) {
+//     const [row, computerColumn] = currentPlayer.makeComputerMove();
+//     if (this.board.gameBoard[row][computerColumn] !== ' ') {
+//       console.error(`Error: Trying to place ${currentPlayer.symbol} in a non-empty spot at [${row}, ${computerColumn}]`);
+//       return false;
+//     }
+//     this.board.gameBoard[row][computerColumn] = currentPlayer.symbol;
+//     return this.#checkGameState(currentPlayer);
+//   }
+
+
+
+//   if (isNaN(column) || column < 0 || column >= this.board.gameBoard[0].length) {
+//     console.log('Ogiltig kolumn!');
+//     return false;
+//   }
+
+//   for (let row = this.board.gameBoard.length - 1; row >= 0; row--) {
+//     if (this.board.gameBoard[row][column] === ' ') {
+//       this.board.gameBoard[row][column] = currentPlayer.symbol;
+//       return this.#checkGameState(currentPlayer);
+//     }
+//   }
+
+
+//   console.log('Kolumnen är full! Vänligen välj en annan kolumn.');
+//   return false;
+// }
+
+
+
