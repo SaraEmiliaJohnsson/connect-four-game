@@ -15,6 +15,8 @@ export default class Game {
   gameOver: boolean;
 
   constructor() {
+    this.board = new Board();
+
     this.gameOver = false;
     this.createPlayer();
 
@@ -69,12 +71,24 @@ export default class Game {
 
   createPlayer() {
     console.clear();
-    console.log('Fyra-I-Rad\n');
-    const playerXName = prompt('Skriv in namn för spelare X: ') || 'Spelare X';
-    const playerOName = prompt('Skriv in namn för spelare O: ') || 'Spelare O';
+    console.log('Välkommen till Fyra-I-Rad!');
 
-    this.playerX = new Player(playerXName, 'X');
-    this.playerO = new Player(playerOName, 'O');
+    const playerXName = prompt('Skriv in namn för spelare X: ') || 'Spelare X';
+
+    const playerOType = this.askYesOrNo('Vill du att spelare O ska vara en dator? (ja/nej): ');
+
+    let playerOName: string;
+    let isComputer: boolean = false;
+
+    if (playerOType === 'ja') {
+      playerOName = 'Dator';
+      isComputer = true;
+    } else {
+      playerOName = prompt('Skriv in namn för spelare O: ') || 'Spelare O';
+    }
+
+    this.playerX = new Player(playerXName, 'X', this.board, false);
+    this.playerO = new Player(playerOName, 'O', this.board, isComputer);
 
     this.currentPlayer = this.playerX;
 
@@ -83,23 +97,32 @@ export default class Game {
     prompt('Tryck Enter för att fortsätta...');
   }
 
+
   startGameLoop() {
     while (!this.gameOver) {
       console.clear();
       this.board.render();
-      let move = prompt(`Ange ditt drag ${this.currentPlayer.symbol} ${this.currentPlayer.name} - skriv in kolumnnummer (1-7): `);
-      if (move === null) {
-        console.log('Du måste ange en kolumn mellan 1-7. Försök igen.');
-        return;
+
+      if (this.currentPlayer.computerMove) {
+        this.moveHandler.makeMove(-1);
+
+
+      } else {
+        let move = prompt(`Ange ditt drag ${this.currentPlayer.symbol} ${this.currentPlayer.name} - skriv in kolumnnummer (1-7): `);
+        if (move === null) {
+          console.log('Du måste ange en kolumn mellan 1-7. Försök igen.');
+          return;
+        }
+
+        let column = +move.trim() - 1;
+
+        if (!this.moveHandler.makeMove(column)) {
+          console.log('Ogiltigt drag. Försök igen.');
+          prompt('Tryck Enter för att fortsätta...');
+          continue;
+        }
       }
 
-      let column = +move.trim() - 1;
-
-      if (!this.moveHandler.makeMove(column)) {
-        console.log('Ogiltigt drag. Försök igen.');
-        prompt('Tryck Enter för att fortsätta...');
-        continue;
-      }
 
       if (!this.gameOver) {
         continue;
