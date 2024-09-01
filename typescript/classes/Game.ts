@@ -69,7 +69,8 @@ export default class Game {
 
   createPlayer() {
     console.clear();
-    console.log('Fyra-I-Rad\n');
+    console.log('Välkommen till Fyra-I-Rad!');
+
     const playerXName = prompt('Skriv in namn för spelare X: ') || 'Spelare X';
 
     const playerOType = this.askYesOrNo('Vill du att spelare O ska vara en dator? (ja/nej): ');
@@ -84,7 +85,6 @@ export default class Game {
       playerOName = prompt('Skriv in namn för spelare O: ') || 'Spelare O';
     }
 
-
     this.playerX = new Player(playerXName, 'X', this.board, false);
     this.playerO = new Player(playerOName, 'O', this.board, isComputer);
 
@@ -94,6 +94,7 @@ export default class Game {
 
     prompt('Tryck Enter för att fortsätta...');
   }
+
 
   startGameLoop() {
     while (!this.gameOver) {

@@ -23,6 +23,12 @@ export default class MoveHandler {
     const currentPlayer = this.game.currentPlayer;
 
 
+    if (currentPlayer.computerMove) {
+
+    }
+
+
+
     if (isNaN(column) || column < 0 || column >= this.board.gameBoard[0].length) {
       console.log('Ogiltig kolumn!');
       return false;
