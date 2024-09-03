@@ -46,7 +46,18 @@ export default class Player {
 	}
 
 	makeHardMove(): number {
+		for (let col of this.getAvailableColumns()) {
+			if (this.isWinningMove(col, this.symbol)) {
+				return col;
+			}
+		}
 
+		const opponentSymbol = this.symbol === 'X' ? 'O' : 'X';
+		for (let col of this.getAvailableColumns()) {
+			if (this.isWinningMove(col, opponentSymbol)) {
+				return col;
+			}
+		}
 		return this.makeEasyMove();
 	}
 
@@ -63,5 +74,11 @@ export default class Player {
 			}
 		}
 		return false;
+	}
+
+	getAvailableColumns(): number[] {
+		return this.board.gameBoard[0]
+			.map((_, colIndex) => colIndex)
+			.filter(colIndex => this.board.gameBoard[0][colIndex] === ' ');
 	}
 }
