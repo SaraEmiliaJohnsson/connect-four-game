@@ -7,10 +7,10 @@ export default class Player {
 	symbol: 'X' | 'O';
 	board: Board;
 	computerMove: boolean;
-	difficulty: 'easy' | 'hard';
+	difficulty: 'lätt' | 'svår';
 	winChecker: WinChecker;
 
-	constructor(name: string, symbol: 'X' | 'O', board: Board, computerMove: boolean = false, difficulty: 'easy' | 'hard' = 'easy') {
+	constructor(name: string, symbol: 'X' | 'O', board: Board, computerMove: boolean = false, difficulty: 'lätt' | 'svår' = 'lätt') {
 		this.name = name;
 		this.symbol = symbol;
 		this.board = board;
@@ -20,7 +20,7 @@ export default class Player {
 	}
 
 	makeComputerMove(): number {
-		return this.difficulty === 'easy' ? this.makeEasyMove() : this.makeHardMove();
+		return this.difficulty === 'lätt' ? this.makeEasyMove() : this.makeHardMove();
 
 	}
 
@@ -34,7 +34,7 @@ export default class Player {
 	}
 
 	makeHardMove(): number {
-		const opponentSymbol = this.symbol === 'X' ? 'O' : 'X';
+
 
 		for (let col of this.getAvailableColumns()) {
 			if (this.isWinningMove(col, this.symbol)) {
@@ -44,7 +44,7 @@ export default class Player {
 			}
 		}
 
-
+		const opponentSymbol = this.symbol === 'X' ? 'O' : 'X';
 		for (let col of this.getAvailableColumns()) {
 			if (this.isWinningMove(col, opponentSymbol)) {
 				console.log(`Datorn blockerar motståndaren genom att placera i kolumn ${col}`);
