@@ -2,4 +2,5 @@ import Game from "./classes/Game.js";
 
 
 
-new Game();
+const game = new Game();
+game.initializeGame();

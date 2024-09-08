@@ -20,44 +20,38 @@ export default class Player {
 	}
 
 	makeComputerMove(): number {
-		if (this.difficulty === 'easy') {
-			return this.makeEasyMove();
-		} else {
-			return this.makeHardMove();
-		}
+		return this.difficulty === 'easy' ? this.makeEasyMove() : this.makeHardMove();
+
 	}
 
 
 
 	makeEasyMove(): number {
-
-		const availableColumns = this.board.gameBoard[0]
-			.map((_, colIndex) => colIndex)
-			.filter(colIndex => this.board.gameBoard[0][colIndex] === ' ');
-
-		if (availableColumns.length === 0) {
-			throw new Error('Ingen ledig kolumn.');
-		}
-
+		const availableColumns = this.getAvailableColumns();
 		const randomColumn = availableColumns[Math.floor(Math.random() * availableColumns.length)];
-		console.log(`Datorn väljer kolumn ${randomColumn}`);
+		console.log(`Datorn gör ett slumpmässigt drag i kolumn ${randomColumn}`);
 		return randomColumn;
-
 	}
 
 	makeHardMove(): number {
+		const opponentSymbol = this.symbol === 'X' ? 'O' : 'X';
+
 		for (let col of this.getAvailableColumns()) {
 			if (this.isWinningMove(col, this.symbol)) {
+				console.log('Datorn försöker vinna');
+
 				return col;
 			}
 		}
 
-		const opponentSymbol = this.symbol === 'X' ? 'O' : 'X';
+
 		for (let col of this.getAvailableColumns()) {
 			if (this.isWinningMove(col, opponentSymbol)) {
+				console.log(`Datorn blockerar motståndaren genom att placera i kolumn ${col}`);
 				return col;
 			}
 		}
+		console.log("Datorn gör ett slumpmässigt drag");
 		return this.makeEasyMove();
 	}
 
