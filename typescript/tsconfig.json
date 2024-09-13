@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
     /* Linting */
+    "strictPropertyInitialization": false,
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "nodenext",
     "target": "es6",
-    "module": "nodenext",
+    "module": "NodeNext",
     "lib": [
       "esnext",
       "dom"

@@ -1,8 +1,9 @@
+
+
 import Board from "./Board.js";
 import WinChecker from "./WinChecker.js";
 
 export default class Player {
-
 	name: string;
 	symbol: 'X' | 'O';
 	board: Board;
@@ -20,48 +21,80 @@ export default class Player {
 	}
 
 	makeComputerMove(): number {
+		console.log(`Datorn spelar på svårighetsgrad: ${this.difficulty}`);
+
 		if (this.difficulty === 'easy') {
 			return this.makeEasyMove();
-		} else {
+		} else if (this.difficulty === 'hard') {
 			return this.makeHardMove();
 		}
-	}
-
-
-
-	makeEasyMove(): number {
-
-		const availableColumns = this.board.gameBoard[0]
-			.map((_, colIndex) => colIndex)
-			.filter(colIndex => this.board.gameBoard[0][colIndex] === ' ');
-
-		if (availableColumns.length === 0) {
-			throw new Error('Ingen ledig kolumn.');
-		}
-
-		const randomColumn = availableColumns[Math.floor(Math.random() * availableColumns.length)];
-		console.log(`Datorn väljer kolumn ${randomColumn}`);
-		return randomColumn;
-
-	}
-
-	makeHardMove(): number {
 
 		return this.makeEasyMove();
 	}
 
-	isWinningMove(column: number, symbol: 'X' | 'O'): boolean {
-		for (let row = this.board.gameBoard.length - 1; row >= 0; row--) {
-			if (this.board.gameBoard[row][column] === ' ') {
-				this.board.gameBoard[row][column] = symbol;
-				const win = this.winChecker.checkForWin() === symbol;
-				this.board.gameBoard[row][column] = ' ';
-				if (win) {
-					return true;
+	makeEasyMove(): number {
+		const availableColumns = this.getAvailableColumns();
+		const randomColumn = availableColumns[Math.floor(Math.random() * availableColumns.length)];
+		console.log(`Datorn gör ett slumpmässigt drag i kolumn ${randomColumn}`);
+		return randomColumn;
+	}
+
+	makeHardMove(): number {
+
+		const winMove = this.findBestMove(this.symbol);
+		if (winMove !== -1) {
+			console.log(`Datorn försöker vinna genom att placera i kolumn ${winMove}`);
+			return winMove;
+		}
+
+
+		const opponentSymbol = this.symbol === 'X' ? 'O' : 'X';
+		const blockMove = this.findBestMove(opponentSymbol);
+		if (blockMove !== -1) {
+			console.log(`Datorn blockerar motståndaren genom att placera i kolumn ${blockMove}`);
+			return blockMove;
+		}
+
+
+		return this.makeEasyMove();
+	}
+
+	findBestMove(symbol: 'X' | 'O'): number {
+		for (let col = 0; col < this.board.gameBoard[0].length; col++) {
+
+			const row = this.getAvailableRow(col);
+			if (row !== -1) {
+
+				this.board.gameBoard[row][col] = symbol;
+
+
+				const winChecker = new WinChecker(this.board);
+				if (winChecker.checkForWin() === symbol) {
+
+					this.board.gameBoard[row][col] = ' ';
+					return col;
 				}
-				break;
+
+
+				this.board.gameBoard[row][col] = ' ';
 			}
 		}
-		return false;
+		return -1;
+	}
+
+	getAvailableRow(column: number): number {
+
+		for (let row = this.board.gameBoard.length - 1; row >= 0; row--) {
+			if (this.board.gameBoard[row][column] === ' ') {
+				return row;
+			}
+		}
+		return -1;
+	}
+
+	getAvailableColumns(): number[] {
+		return this.board.gameBoard[0]
+			.map((_, colIndex) => colIndex)
+			.filter(colIndex => this.board.gameBoard[0][colIndex] === ' ');
 	}
 }
