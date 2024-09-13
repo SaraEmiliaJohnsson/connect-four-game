@@ -21,7 +21,7 @@ export default class WinChecker {
       [[0, 0], [1, -1], [2, -2], [3, -3]] // Check diagonal up-right win.
     ];
 
-    // Loop through each player ('X' and 'O') to check if either has won. 
+    // Loop through each player ('X' and 'O') to check if either has won.
     for (let symbol of ['X', 'O']) {
       // r = row, c = column.
       for (let r = 0; r < b.length; r++) {

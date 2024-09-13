@@ -16,7 +16,6 @@ export default class Game {
 
   constructor() {
     this.board = new Board();
-
     this.gameOver = false;
     this.createPlayer();
 
@@ -73,26 +72,36 @@ export default class Game {
     console.clear();
     console.log('Välkommen till Fyra-I-Rad!');
 
-    const playerXName = prompt('Skriv in namn för spelare X: ') || 'Spelare X';
+    const playerXType = this.askYesOrNo('Ska spelare X vara en dator? (ja/nej): ');
+    let playerXName: string;
+    let playerXDifficulty: 'easy' | 'hard' = 'easy';
 
-    const playerOType = this.askYesOrNo('Vill du att spelare O ska vara en dator? (ja/nej): ');
+    if (playerXType === 'ja') {
+      playerXName = 'Dator X';
+      playerXDifficulty = prompt('Välj svårighetsgrad för datorn X (easy/hard): ') as 'easy' | 'hard';
+    } else {
+      playerXName = prompt('Skriv in namn för spelare X: ') || 'Spelare X';
+    }
 
+    // Fråga om Spelare O ska vara en dator och välj svårighetsgrad om ja
+    const playerOType = this.askYesOrNo('Ska spelare O vara en dator? (ja/nej): ');
     let playerOName: string;
-    let isComputer: boolean = false;
-    let difficulty: 'lätt' | 'svår' = 'lätt';
+    let playerODifficulty: 'easy' | 'hard' = 'easy';
 
     if (playerOType === 'ja') {
-      playerOName = 'Dator';
-      isComputer = true;
-
-      const difficultyChoice = prompt('Välj svårighetsgrad för datorn, (lätt/svår): ')?.toLowerCase();
-      difficulty = difficultyChoice === 'svår' ? 'svår' : 'lätt';
+      playerOName = 'Dator O';
+      playerODifficulty = prompt('Välj svårighetsgrad för datorn O (easy/hard): ') as 'easy' | 'hard';
     } else {
       playerOName = prompt('Skriv in namn för spelare O: ') || 'Spelare O';
     }
 
-    this.playerX = new Player(playerXName, 'X', this.board, false);
-    this.playerO = new Player(playerOName, 'O', this.board, isComputer, difficulty);
+    // Skapa spelare X och O baserat på val
+    this.playerX = new Player(playerXName, 'X', this.board, playerXType === 'ja', playerXDifficulty);
+    this.playerO = new Player(playerOName, 'O', this.board, playerOType === 'ja', playerODifficulty);
+
+
+
+
 
     this.currentPlayer = this.playerX;
 
