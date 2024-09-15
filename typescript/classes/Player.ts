@@ -41,25 +41,25 @@ export default class Player {
 
 	makeHardMove(): number {
 
-		const winMove = this.findBestMove(this.symbol);
-		if (winMove !== -1) {
-			console.log(`Datorn försöker vinna genom att placera i kolumn ${winMove}`);
-			return winMove;
+		const winningMove = this.makeWinningMove(this.symbol);
+		if (winningMove !== -1) {
+			console.log(`Datorn försöker vinna genom att placera i kolumn ${winningMove}`);
+			return winningMove;
 		}
 
 
 		const opponentSymbol = this.symbol === 'X' ? 'O' : 'X';
-		const blockMove = this.findBestMove(opponentSymbol);
-		if (blockMove !== -1) {
-			console.log(`Datorn blockerar motståndaren genom att placera i kolumn ${blockMove}`);
-			return blockMove;
+		const defensiveMove = this.makeWinningMove(opponentSymbol);
+		if (defensiveMove !== -1) {
+			console.log(`Datorn blockerar motståndaren genom att placera i kolumn ${defensiveMove}`);
+			return defensiveMove;
 		}
 
 
 		return this.makeEasyMove();
 	}
 
-	findBestMove(symbol: 'X' | 'O'): number {
+	makeWinningMove(symbol: 'X' | 'O'): number {
 		for (let col = 0; col < this.board.gameBoard[0].length; col++) {
 
 			const row = this.getAvailableRow(col);

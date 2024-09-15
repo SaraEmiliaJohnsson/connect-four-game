@@ -83,7 +83,7 @@ export default class Game {
       playerXName = prompt('Skriv in namn för spelare X: ') || 'Spelare X';
     }
 
-    // Fråga om Spelare O ska vara en dator och välj svårighetsgrad om ja
+
     const playerOType = this.askYesOrNo('Ska spelare O vara en dator? (ja/nej): ');
     let playerOName: string;
     let playerODifficulty: 'easy' | 'hard' = 'easy';
@@ -95,7 +95,7 @@ export default class Game {
       playerOName = prompt('Skriv in namn för spelare O: ') || 'Spelare O';
     }
 
-    // Skapa spelare X och O baserat på val
+
     this.playerX = new Player(playerXName, 'X', this.board, playerXType === 'ja', playerXDifficulty);
     this.playerO = new Player(playerOName, 'O', this.board, playerOType === 'ja', playerODifficulty);
 
